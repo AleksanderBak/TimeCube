@@ -11,6 +11,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs } from "firebase/firestore/lite";
 import { useEffect, useState } from "react";
 import firebaseConfig from "./configs/firebaseConfig";
+import ConfigureScreen from "./screens/ConfigureScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -99,9 +100,10 @@ const App = () => {
                   ),
                 }}
               />
+              {/* <ConfigureScreen props={{ tasks: tasks, cubes: cubes }} /> */}
               <Tab.Screen
-                name="Configure"
-                component={Configure}
+                name="ConfigureScreen"
+                component={ConfigureScreen}
                 initialParams={{ cubes: cubes }}
                 options={{
                   tabBarLabel: "Configure",

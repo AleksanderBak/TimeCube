@@ -1,6 +1,5 @@
 import { View, Text, TouchableOpacity } from "react-native";
-
-const CubeSide = ({ number, color, name }) => {
+const CubeSide = ({ number, color, name, navigation }) => {
   let bgColor = color.dim;
   let borderColor = color.bright;
 
@@ -10,6 +9,14 @@ const CubeSide = ({ number, color, name }) => {
         styles.sideContainer,
         { backgroundColor: bgColor, borderTopColor: borderColor },
       ]}
+      onPress={() =>
+        navigation.navigate("CubeSideDetails", {
+          number,
+          name,
+          bgColor,
+          borderColor,
+        })
+      }
     >
       <Text style={styles.sideNumber}>{number}</Text>
       <Text style={styles.sideText}>{name}</Text>

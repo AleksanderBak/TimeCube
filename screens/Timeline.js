@@ -53,16 +53,6 @@ const Timeline = ({ route }) => {
         keyExtractor={(item) => item.id}
         renderItem={taskRenderer}
       ></FlatList>
-      {/* <ScrollView>
-        <Task name="Task 1" time="1:30" startTime="10:00" color={"red"} />
-        <Task name="Task 2" time="1:30" startTime="11:30" />
-        <Task name="Task 1" time="1:30" startTime="10:00" />
-        <Task name="Task 2" time="1:30" startTime="11:30" />
-        <Task name="Task 1" time="1:30" startTime="10:00" />
-        <Task name="Task 2" time="1:30" startTime="11:30" />
-        <Task name="Task 1" time="1:30" startTime="10:00" />
-        <Task name="Task 2" time="1:30" startTime="11:30" />
-      </ScrollView> */}
     </View>
   );
 };
