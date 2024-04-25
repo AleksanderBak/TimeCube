@@ -11,10 +11,12 @@ const Timeline = ({ route }) => {
 
   const taskRenderer = ({ item }) => {
     let minutes = Math.round(
-      ((item.StopTime - item.StartTime) / 60) % 60,
+      (item.StopTime - item.StartTime) / 60,
       2
     ).toString();
     const hours = Math.floor(minutes / 60);
+
+    minutes = (minutes % 60).toString();
 
     if (minutes.length < 2) {
       minutes = `0${minutes}`;

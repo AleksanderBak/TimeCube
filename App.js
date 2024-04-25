@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Timeline from "./screens/Timeline";
 import Stats from "./screens/Stats";
 import Configure from "./screens/Configure";
+import LoadingScreen from "./screens/LoadingScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { Icon } from "@rneui/themed";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -10,6 +11,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs } from "firebase/firestore/lite";
 import { useEffect, useState } from "react";
 import firebaseConfig from "./configs/firebaseConfig";
+
 const Tab = createBottomTabNavigator();
 
 const App = () => {
@@ -68,6 +70,7 @@ const App = () => {
                 tabBarStyle: {
                   backgroundColor: "#121212",
                   height: 70,
+                  borderTopWidth: 1.5,
                 },
                 headerShown: false,
                 tabBarIconStyle: {
@@ -110,7 +113,7 @@ const App = () => {
             </Tab.Navigator>
           </NavigationContainer>
         ) : (
-          <Text>Loading...</Text>
+          <LoadingScreen />
         )}
       </SafeAreaView>
     </View>
