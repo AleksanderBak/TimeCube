@@ -1,4 +1,5 @@
 import { View, Text, StyleSheet } from "react-native";
+import colors from "../../configs/colors";
 
 const CubeSideDetails = ({ route }) => {
   const { number, name, bgColor, borderColor } = route.params;
@@ -19,17 +20,17 @@ const CubeSideDetails = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#121212",
+    backgroundColor: colors.primaryBackground,
     justifyContent: "center",
     alignItems: "center",
   },
   number: {
     fontSize: 30,
-    color: "white",
+    color: colors.primaryText,
   },
   text: {
     fontSize: 20,
-    color: "white",
+    color: colors.primaryText,
   },
 
   colorContainer: {

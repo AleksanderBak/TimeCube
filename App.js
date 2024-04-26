@@ -1,17 +1,17 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Timeline from "./screens/Timeline";
 import Stats from "./screens/Stats";
-import Configure from "./screens/Configure";
 import LoadingScreen from "./screens/LoadingScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { Icon } from "@rneui/themed";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs } from "firebase/firestore/lite";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import firebaseConfig from "./configs/firebaseConfig";
 import ConfigureScreen from "./screens/ConfigureScreen";
+import colors from "./configs/colors";
 
 const Tab = createBottomTabNavigator();
 
@@ -22,7 +22,7 @@ const App = () => {
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  const getData = async () => {
+  const getData = useCallback(async () => {
     let taskResult = [];
     let cubeResult = {};
     const taskQuerySnapshot = await getDocs(collection(db, "Tasks"));
@@ -45,7 +45,7 @@ const App = () => {
     });
 
     setCube(cubeResult);
-  };
+  }, []);
 
   useEffect(() => {
     getData();
@@ -61,15 +61,15 @@ const App = () => {
               backBehavior="history"
               sceneContainerStyle={styles.sceneContainer}
               screenOptions={{
-                tabBarActiveTintColor: "white",
-                tabBarInactiveTintColor: "gray",
+                tabBarActiveTintColor: colors.bottomTabActive,
+                tabBarInactiveTintColor: colors.bottomTabInactive,
                 tabBarShowLabel: true,
                 tabBarLabelStyle: {
                   fontSize: 15,
                   paddingBottom: 10,
                 },
                 tabBarStyle: {
-                  backgroundColor: "#121212",
+                  backgroundColor: colors.secondaryBackground,
                   height: 70,
                   borderTopWidth: 1.5,
                 },
@@ -125,10 +125,10 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#171717",
+    backgroundColor: colors.secondaryBackground,
   },
   sceneContainer: {
-    backgroundColor: "#171717",
+    backgroundColor: colors.primaryBackground,
   },
 });
 

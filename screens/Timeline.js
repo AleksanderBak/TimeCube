@@ -1,7 +1,5 @@
-import { View, Text, FlatList, ScrollView } from "react-native";
-import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs } from "firebase/firestore/lite";
-import { useEffect, useState } from "react";
+import { View, FlatList } from "react-native";
+import { useCallback } from "react";
 import Calendar from "../components/Calendar";
 import Task from "../components/Task";
 
@@ -9,7 +7,7 @@ const Timeline = ({ route }) => {
   const tasks = route.params.tasks;
   const cubes = route.params.cubes;
 
-  const taskRenderer = ({ item }) => {
+  const taskRenderer = useCallback(({ item }) => {
     let minutes = Math.round(
       (item.StopTime - item.StartTime) / 60,
       2
@@ -43,7 +41,7 @@ const Timeline = ({ route }) => {
         color={color}
       />
     );
-  };
+  }, []);
 
   return (
     <View style={styles.TaskBox}>

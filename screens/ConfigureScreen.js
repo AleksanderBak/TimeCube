@@ -1,9 +1,8 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer } from "@react-navigation/native";
-import { TouchableOpacity } from "react-native";
-import Configure from "./Configure";
-import CubeSideDetails from "./CubeSideDetails";
-import TestScreen from "./TestScreen";
+import Configure from "./configure/Configure";
+import CubeSideDetails from "./configure/CubeSideDetails";
+import colors from "../configs/colors";
+
 const Stack = createStackNavigator();
 
 const ConfigureScreen = ({ route }) => {
@@ -12,8 +11,10 @@ const ConfigureScreen = ({ route }) => {
     <Stack.Navigator
       initialRouteName="Configure"
       screenOptions={{
-        cardStyle: { backgroundColor: "#121212" },
+        cardStyle: { backgroundColor: colors.primaryBackground },
+        animationEnabled: false,
       }}
+      animated={false}
     >
       <Stack.Screen
         name="Configure"
@@ -29,15 +30,12 @@ const ConfigureScreen = ({ route }) => {
         options={({ route }) => ({
           headerTitle: route.params.name,
           headerStyle: {
-            backgroundColor: "#121212",
+            backgroundColor: colors.primaryBackground,
           },
-          headerTintColor: "white",
+          headerTintColor: colors.primaryText,
         })}
       />
-      {/* <Stack.Screen name="Configure" component={Configure} initialParams={cubes}/>
-        <Stack.Screen name="CubeSideDetails" component={CubeSideDetails} /> */}
     </Stack.Navigator>
-    // </NavigationContainer>
   );
 };
 

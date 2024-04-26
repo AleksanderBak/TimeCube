@@ -1,5 +1,23 @@
-import { View, Text, StyleSheet, ScrollView } from "react-native";
-import CalendarCard from "./CalendarCard";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import colors from "../configs/colors";
+
+const CalendarCard = ({ dayNumber, month, active }) => {
+  let bgColor = active ? colors.calendarActive : colors.calendarInactive;
+  return (
+    <TouchableOpacity
+      style={[styles.calendarCard, { backgroundColor: bgColor }]}
+    >
+      <Text style={styles.calendarCardDay}>{dayNumber}</Text>
+      <Text style={styles.calendarCardMonth}>{month}</Text>
+    </TouchableOpacity>
+  );
+};
 
 const Calendar = () => {
   return (
@@ -27,7 +45,25 @@ const styles = {
     marginBottom: 10,
     flexDirection: "row",
     borderBottomWidth: 1,
-    borderBottomColor: "white",
+    borderBottomColor: colors.primaryText,
+  },
+  calendarCard: {
+    height: 60,
+    width: 50,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 5,
+  },
+  calendarCardDay: {
+    textAlign: "center",
+    fontSize: 22,
+    color: colors.primaryText,
+  },
+  calendarCardMonth: {
+    textAlign: "center",
+    fontSize: 12,
+    color: colors.primaryText,
   },
 };
 

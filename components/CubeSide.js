@@ -1,4 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
+import colors from "../configs/colors";
+
 const CubeSide = ({ number, color, name, navigation }) => {
   let bgColor = color.dim;
   let borderColor = color.bright;
@@ -36,11 +38,11 @@ const styles = {
   },
   sideNumber: {
     fontSize: 30,
-    color: "white",
+    color: colors.primaryText,
   },
   sideText: {
     fontSize: 12,
-    color: "white",
+    color: colors.primaryText,
   },
 };
 export default CubeSide;

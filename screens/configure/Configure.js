@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
-import CubeSide from "../components/CubeSide";
-import cubeColors from "../configs/cubeColors";
+import CubeSide from "../../components/CubeSide";
+import cubeColors from "../../configs/cubeColors";
 
 const Configure = ({ route, navigation }) => {
   const cubes = route.params;
