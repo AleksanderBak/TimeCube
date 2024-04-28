@@ -1,17 +1,16 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import colors from "../configs/colors";
+import { useRef } from "react";
+import { set } from "firebase/database";
 
-const CalendarCard = ({ dayNumber, month, active }) => {
-  let bgColor = active ? colors.calendarActive : colors.calendarInactive;
+const CalendarCard = ({ dayNumber, month, active, id, setActiveDay }) => {
+  let bgColor = active ? colors.focusedBottomTab : colors.calendarInactive;
   return (
     <TouchableOpacity
       style={[styles.calendarCard, { backgroundColor: bgColor }]}
+      onPress={() => {
+        setActiveDay(id);
+      }}
     >
       <Text style={styles.calendarCardDay}>{dayNumber}</Text>
       <Text style={styles.calendarCardMonth}>{month}</Text>
@@ -19,19 +18,34 @@ const CalendarCard = ({ dayNumber, month, active }) => {
   );
 };
 
-const Calendar = () => {
+const Calendar = ({ days, activeDay, setActiveDay }) => {
+  const flatListRef = useRef();
+
+  const changeActiveDay = (id) => {
+    setActiveDay(id);
+    const index = days.findIndex((day) => day.id === id);
+    flatListRef.current?.scrollToIndex({ index, animated: true });
+  };
+
   return (
     <View style={styles.CalendarBox}>
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-        <CalendarCard dayNumber={27} month={"Feb"} active={true} />
-        <CalendarCard dayNumber={28} month={"Feb"} active={false} />
-        <CalendarCard dayNumber={29} month={"Feb"} active={false} />
-        <CalendarCard dayNumber={30} month={"Feb"} active={false} />
-        <CalendarCard dayNumber={31} month={"Feb"} active={false} />
-        <CalendarCard dayNumber={32} month={"Feb"} active={false} />
-        <CalendarCard dayNumber={33} month={"Feb"} active={false} />
-        <CalendarCard dayNumber={34} month={"Feb"} active={false} />
-      </ScrollView>
+      <FlatList
+        ref={flatListRef}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        scrollsToTop={true}
+        data={days}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <CalendarCard
+            dayNumber={item.day}
+            month={item.month}
+            active={item.id === activeDay}
+            id={item.id}
+            setActiveDay={changeActiveDay}
+          />
+        )}
+      ></FlatList>
     </View>
   );
 };
