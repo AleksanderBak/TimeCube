@@ -1,10 +1,10 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import colors from "../configs/colors";
+import { update } from "firebase/database";
 
-const CubeSide = ({ number, color, name, navigation }) => {
-  let bgColor = color.dim;
-  let borderColor = color.bright;
-
+const CubeSide = ({ number, color, name, navigation, colorName }) => {
+  const bgColor = color.dim;
+  const borderColor = color.bright;
   return (
     <TouchableOpacity
       style={[
@@ -17,6 +17,7 @@ const CubeSide = ({ number, color, name, navigation }) => {
           name,
           bgColor,
           borderColor,
+          colorName,
         })
       }
     >

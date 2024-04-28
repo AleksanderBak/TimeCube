@@ -2,11 +2,11 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Configure from "./configure/Configure";
 import CubeSideDetails from "./configure/CubeSideDetails";
 import colors from "../configs/colors";
+import { View, Text } from "react-native";
 
 const Stack = createStackNavigator();
 
-const ConfigureScreen = ({ route }) => {
-  const cubes = route.params.cubes;
+const ConfigureScreen = ({ cubes }) => {
   return (
     <Stack.Navigator
       initialRouteName="Configure"
@@ -19,7 +19,7 @@ const ConfigureScreen = ({ route }) => {
       <Stack.Screen
         name="Configure"
         component={Configure}
-        initialParams={cubes}
+        initialParams={{ cubes, refresh: false }}
         options={{
           headerShown: false,
         }}
@@ -28,7 +28,7 @@ const ConfigureScreen = ({ route }) => {
         name="CubeSideDetails"
         component={CubeSideDetails}
         options={({ route }) => ({
-          headerTitle: route.params.name,
+          headerTitle: route.params.number.toString(),
           headerStyle: {
             backgroundColor: colors.primaryBackground,
           },

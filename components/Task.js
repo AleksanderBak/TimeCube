@@ -1,9 +1,11 @@
 import { View, Text } from "react-native";
-import cubeColors from "../configs/cubeColors";
+import cubeColors from "../configs/availableCubeColors";
+import colors from "../configs/colors";
 
 const Task = ({ name, time, startTime, color }) => {
   bgColor = cubeColors[color].dim;
   borderColor = cubeColors[color].bright;
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.startTimeContainer}>
@@ -28,48 +30,45 @@ const Task = ({ name, time, startTime, color }) => {
 const styles = {
   mainContainer: {
     flexDirection: "row",
-    marginBottom: 20,
+    marginBottom: 0,
   },
   nameContainer: {
-    height: 70,
+    height: 60,
     width: 200,
     borderLeftWidth: 5,
-    borderLeftColor: "#2a9d8f",
     borderRadius: 7,
-    marginTop: 5,
+    marginTop: 25,
   },
   nameText: {
     fontSize: 17,
-    color: "white",
+    color: colors.primaryText,
     paddingHorizontal: 10,
     paddingVertical: 5,
   },
   timeContainer: {
-    height: 70,
-    width: 70,
-    borderColor: "black",
+    height: 60,
+    width: 60,
     borderWidth: 2,
     borderStyle: "dashed",
-    borderColor: "white",
+    borderColor: colors.primaryText,
     borderRadius: 7,
     justifyContent: "center",
     alignItems: "center",
     marginLeft: 15,
-    marginTop: 5,
+    marginTop: 25,
   },
   timeText: {
     fontSize: 20,
-    color: "white",
+    color: colors.primaryText,
   },
   startTimeContainer: {
     height: 90,
     width: 70,
     alignItems: "center",
-    marginLeft: 20,
   },
   startTimeText: {
     fontSize: 15,
-    color: "white",
+    color: colors.primaryText,
   },
   lineBox: {
     height: 60,

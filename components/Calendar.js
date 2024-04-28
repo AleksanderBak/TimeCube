@@ -39,7 +39,7 @@ const Calendar = () => {
 const styles = {
   CalendarBox: {
     height: 100,
-    marginTop: 20,
+    marginTop: 40,
     alignItems: "center",
     marginHorizontal: 15,
     marginBottom: 10,
