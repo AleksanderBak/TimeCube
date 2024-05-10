@@ -1,35 +1,58 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, StatusBar, Text } from "react-native";
 import Timeline from "./screens/Timeline";
 import Stats from "./screens/Stats";
-import LoadingScreen from "./screens/LoadingScreen";
 import { NavigationContainer } from "@react-navigation/native";
-import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs } from "firebase/firestore/lite";
 import { useEffect, useState, useCallback } from "react";
-import firebaseConfig from "./configs/firebaseConfig";
 import ConfigureScreen from "./screens/ConfigureScreen";
 import colors from "./configs/colors";
 import { Icon, PaperProvider, BottomNavigation } from "react-native-paper";
-import cubeConfig from "./configs/cubeConfig";
+import { useFonts } from "expo-font";
+import fonts from "./configs/fonts";
 
 const App = () => {
   const [index, setIndex] = useState(0);
+
+  let [fontsLoaded] = useFonts({
+    Poppins: require("./assets/fonts/Poppins-Regular.ttf"),
+    PoppinsBold: require("./assets/fonts/Poppins-Bold.ttf"),
+    PoppinsLight: require("./assets/fonts/Poppins-Light.ttf"),
+    PoppinsItalic: require("./assets/fonts/Poppins-Italic.ttf"),
+    PoppinsSemiBold: require("./assets/fonts/Poppins-SemiBold.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
     <PaperProvider>
       <NavigationContainer>
         <View style={styles.container}>
+          <StatusBar
+            animated={true}
+            backgroundColor={colors.secondaryBackground}
+          />
           <BottomNavigation
             keyboardHidesNavigationBar={true}
             barStyle={{
               backgroundColor: colors.secondaryBackground,
-              width: "85%",
-              alignSelf: "center",
-              height: 70,
-              bottom: 10,
-              borderRadius: 10,
-              overflow: "hidden",
-              justifyContent: "center",
+              marginTop: 5,
+            }}
+            renderLabel={({ route, focused }) => {
+              return (
+                <Text
+                  style={{
+                    color: focused
+                      ? colors.focusedBottomTab
+                      : colors.unfocusedBottomTab,
+                    fontFamily: fonts.Light,
+                    alignSelf: "center",
+                    fontSize: 12,
+                  }}
+                >
+                  {route.title}
+                </Text>
+              );
             }}
             activeColor={colors.focusedBottomTab}
             inactiveColor={colors.unfocusedBottomTab}
@@ -55,6 +78,11 @@ const App = () => {
                   unfocusedIcon: "dice-5-outline",
                 },
               ],
+            }}
+            activeIndicatorStyle={{
+              backgroundColor: colors.focusedBottomTab,
+              height: 2,
+              marginTop: 85,
             }}
             renderIcon={({ route, focused }) => {
               return (
@@ -85,7 +113,6 @@ const App = () => {
             theme={{
               colors: {
                 background: colors.primaryBackground,
-                secondaryContainer: colors.focusedBottomTabBackground,
               },
             }}
           />

@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import colors from "../configs/colors";
 import { update } from "firebase/database";
+import fonts from "../configs/fonts";
 
 const CubeSide = ({ number, color, name, navigation, colorName }) => {
   const bgColor = color.dim;
@@ -40,10 +41,12 @@ const styles = {
   sideNumber: {
     fontSize: 30,
     color: colors.primaryText,
+    fontFamily: fonts.Regular,
   },
   sideText: {
     fontSize: 12,
     color: colors.primaryText,
+    fontFamily: fonts.Regular,
   },
 };
 export default CubeSide;

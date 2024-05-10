@@ -24,16 +24,17 @@ const Timeline = () => {
   const [tasks, setTasks] = useState({});
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [days, setDays] = useState();
-  const [activeDay, setActiveDay] = useState(0);
+  const [activeDay, setActiveDay] = useState(2);
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
   const getDays = () => {
+    const numberOfDays = 5;
     let days = [];
     let today = new Date();
-    today.setDate(today.getDate() - 10);
-    for (let i = 0; i <= 10; i++) {
+    today.setDate(today.getDate() - numberOfDays);
+    for (let i = 0; i <= numberOfDays; i++) {
       let day = today.toLocaleString("default", { day: "2-digit" });
       let month = today.toLocaleString("default", { month: "short" });
       date = new Date(today);
@@ -93,10 +94,11 @@ const Timeline = () => {
     const currDate = days[activeDay].date;
 
     const startDate = new Date(item.StartTime * 1000);
-    console.log(startDate, currDate, sameYear(currDate, startDate));
-    if (!sameYear(currDate, startDate)) {
-      return <View></View>;
-    }
+
+    // DIVISION BY DAYS
+    // if (!sameYear(currDate, startDate)) {
+    //   return <View></View>;
+    // }
 
     let minutes = Math.round(
       (item.StopTime - item.StartTime) / 60,
@@ -143,6 +145,7 @@ const Timeline = () => {
         }}
         keyExtractor={(item) => item.id}
         renderItem={taskRenderer}
+        showsVerticalScrollIndicator={false}
       ></FlatList>
     </View>
   ) : (
@@ -154,7 +157,6 @@ styles = {
   TaskBox: {
     flex: 1,
     alignItems: "center",
-    paddingBottom: 10,
   },
 };
 

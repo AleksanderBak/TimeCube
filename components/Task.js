@@ -1,6 +1,7 @@
 import { View, Text } from "react-native";
 import cubeColors from "../configs/availableCubeColors";
 import colors from "../configs/colors";
+import fonts from "../configs/fonts";
 
 const Task = ({ name, time, startTime, color }) => {
   bgColor = cubeColors[color].dim;
@@ -44,6 +45,7 @@ const styles = {
     color: colors.primaryText,
     paddingHorizontal: 10,
     paddingVertical: 5,
+    fontFamily: fonts.Light,
   },
   timeContainer: {
     height: 60,
@@ -60,20 +62,24 @@ const styles = {
   timeText: {
     fontSize: 20,
     color: colors.primaryText,
+    includeFontPadding: false,
+    fontFamily: fonts.Regular,
   },
   startTimeContainer: {
     height: 90,
-    width: 70,
+    width: 40,
     alignItems: "center",
+    marginRight: 5,
   },
   startTimeText: {
     fontSize: 15,
     color: colors.primaryText,
+    includeFontPadding: false,
+    fontFamily: fonts.Light,
   },
   lineBox: {
     height: 60,
     width: 2,
-    marginTop: 5,
   },
 };
 

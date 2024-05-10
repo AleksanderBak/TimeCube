@@ -9,6 +9,8 @@ import Task from "../../components/Task";
 import { useContext } from "react";
 import { CubeContext } from "../../components/CubeContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import fonts from "../../configs/fonts";
+import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 
 const Active = () => {
   return (
@@ -86,6 +88,8 @@ const CubeSideDetails = ({ route, navigation }) => {
         contentStyle={{
           color: colors.primaryText,
           backgroundColor: colors.secondaryBackground,
+          includeFontPadding: false,
+          fontFamily: fonts.Light,
           fontSize: 18,
         }}
         theme={{
@@ -99,27 +103,35 @@ const CubeSideDetails = ({ route, navigation }) => {
       />
       <View style={styles.colorContainer}>{availableColors}</View>
       <View style={styles.buttonBox}>
-        <Button
-          icon="cancel"
-          mode="contained"
+        <TouchableOpacity
           style={styles.cancelButton}
           onPress={() => {
             navigation.goBack();
           }}
         >
-          Cancel
-        </Button>
-        <Button
-          icon="check-circle"
-          mode="contained"
+          <MaterialIcons
+            name="cancel"
+            size={24}
+            color={colors.primaryText}
+            style={{ marginRight: 10, marginTop: 2 }}
+          />
+          <Text style={styles.buttonText}>Cancel</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
           style={styles.saveButton}
           onPress={() => {
             updateCube(number, activeName, activeColor);
             navigation.navigate("Configure", { refresh: true });
           }}
         >
-          Save
-        </Button>
+          <FontAwesome
+            name="check"
+            size={24}
+            color={colors.primaryText}
+            style={{ marginRight: 10, marginTop: 2 }}
+          />
+          <Text style={styles.buttonText}>Save</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -136,13 +148,10 @@ const styles = StyleSheet.create({
     color: colors.primaryText,
     margin: 20,
   },
-  text: {
-    fontSize: 20,
-    color: colors.primaryText,
-  },
   textInputLabel: {
     color: colors.unfocusedBottomTab,
     fontSize: 16,
+    fontFamily: fonts.Regular,
   },
 
   colorContainer: {
@@ -192,16 +201,22 @@ const styles = StyleSheet.create({
   saveButton: {
     marginVertical: 20,
     marginLeft: 20,
-    width: 160,
+    width: 150,
     borderRadius: 5,
     backgroundColor: colors.saveButton,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    flexDirection: "row",
   },
 
   cancelButton: {
     marginVertical: 20,
-    width: 100,
+    width: 150,
     backgroundColor: colors.error,
     borderRadius: 5,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    flexDirection: "row",
   },
 
   taskNameText: {
@@ -209,6 +224,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     top: 10,
     left: 10,
+    fontFamily: fonts.Regular,
   },
 
   taskNameBox: {
@@ -217,6 +233,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 70,
     width: 200,
+  },
+
+  buttonText: {
+    color: colors.primaryText,
+    fontSize: 18,
+    fontFamily: fonts.SemiBold,
   },
 });
 

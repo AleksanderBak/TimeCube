@@ -1,10 +1,15 @@
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import colors from "../configs/colors";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { set } from "firebase/database";
+import fonts from "../configs/fonts";
+import { useFonts } from "expo-font";
+
+console.log(fonts);
 
 const CalendarCard = ({ dayNumber, month, active, id, setActiveDay }) => {
-  let bgColor = active ? colors.focusedBottomTab : colors.calendarInactive;
+  let bgColor = active ? colors.calendarActive : colors.calendarInactive;
+
   return (
     <TouchableOpacity
       style={[styles.calendarCard, { backgroundColor: bgColor }]}
@@ -27,13 +32,29 @@ const Calendar = ({ days, activeDay, setActiveDay }) => {
     flatListRef.current?.scrollToIndex({ index, animated: true });
   };
 
+  const today = new Date();
+
   return (
     <View style={styles.CalendarBox}>
+      <View style={styles.todayBox}>
+        <Text
+          style={{
+            color: colors.primaryText,
+            fontSize: 15,
+            marginTop: 10,
+            fontFamily: "PoppinsLight",
+          }}
+        >
+          Today
+        </Text>
+        <Text style={styles.today}>{today.toDateString()}</Text>
+      </View>
       <FlatList
         ref={flatListRef}
         horizontal
         showsHorizontalScrollIndicator={false}
         scrollsToTop={true}
+        scrollEnabled={false}
         data={days}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
@@ -52,14 +73,23 @@ const Calendar = ({ days, activeDay, setActiveDay }) => {
 
 const styles = {
   CalendarBox: {
-    height: 100,
-    marginTop: 40,
+    height: 145,
     alignItems: "center",
     marginHorizontal: 15,
-    marginBottom: 10,
-    flexDirection: "row",
+    marginBottom: 15,
+    flexDirection: "column",
     borderBottomWidth: 1,
     borderBottomColor: colors.primaryText,
+  },
+  todayBox: {
+    marginBottom: 5,
+    alignSelf: "stretch",
+    alignItems: "flex-start",
+  },
+  today: {
+    color: colors.primaryText,
+    fontSize: 18,
+    fontFamily: fonts.Bold,
   },
   calendarCard: {
     height: 60,
@@ -70,14 +100,17 @@ const styles = {
     marginHorizontal: 5,
   },
   calendarCardDay: {
+    includeFontPadding: false,
     textAlign: "center",
-    fontSize: 22,
+    fontSize: 20,
     color: colors.primaryText,
+    fontFamily: fonts.Regular,
   },
   calendarCardMonth: {
     textAlign: "center",
     fontSize: 12,
     color: colors.primaryText,
+    fontFamily: fonts.Light,
   },
 };
 
