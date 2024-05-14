@@ -1,3 +1,4 @@
+import { useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -5,18 +6,18 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
-import { useState, useCallback } from "react";
 import { DatePickerModal } from "react-native-paper-dates";
 import { registerTranslation } from "react-native-paper-dates";
-import colors from "../configs/colors";
 import {
   PieChart,
   LineChart,
   BarChart,
   StackedBarChart,
 } from "react-native-gifted-charts";
+
+import colors from "../configs/colors";
 import availableCubeColors from "../configs/availableCubeColors";
-import { Line } from "react-native-svg";
+
 import TaskStats from "../components/TaskStats";
 
 registerTranslation("en", {

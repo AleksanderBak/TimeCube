@@ -1,14 +1,14 @@
-import { View, FlatList } from "react-native";
 import { useCallback, useEffect, useState } from "react";
-import Calendar from "../components/Calendar";
-import Task from "../components/Task";
-import EmptyTask from "../components/EmptyTask";
-import cubeConfig from "../configs/cubeConfig";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { get, set } from "firebase/database";
-import LoadingScreen from "./LoadingScreen";
+import { View, FlatList } from "react-native";
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs } from "firebase/firestore/lite";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import LoadingScreen from "../components/LoadingScreen";
+import Calendar from "../components/Calendar";
+import Task from "../components/Task";
+
+import cubeConfig from "../configs/cubeConfig";
 import firebaseConfig from "../configs/firebaseConfig";
 
 const sameYear = (date1, date2) => {

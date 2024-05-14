@@ -1,13 +1,13 @@
-import { View, Text } from "react-native";
+import { useState, useCallback } from "react";
+import { View } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import CubeSide from "../../components/CubeSide";
+import LoadingScreen from "../../components/LoadingScreen";
+
 import availableColors from "../../configs/availableCubeColors";
 import cubeConfig from "../../configs/cubeConfig";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useEffect, useState, useCallback } from "react";
-import { useFocusEffect } from "@react-navigation/native";
-import LoadingScreen from "../LoadingScreen";
-import { set } from "firebase/database";
-import { CubeContext } from "../../components/CubeContext";
 
 const Configure = ({ route, navigation }) => {
   const [cubes, setCubes] = useState();

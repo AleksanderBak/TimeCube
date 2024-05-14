@@ -50,10 +50,10 @@ const styles = {
   timeContainer: {
     height: 60,
     width: 60,
-    borderWidth: 2,
-    borderStyle: "dashed",
+    borderWidth: 1,
+    borderStyle: "solid",
     borderColor: colors.primaryText,
-    borderRadius: 7,
+    borderRadius: 15,
     justifyContent: "center",
     alignItems: "center",
     marginLeft: 15,
@@ -63,7 +63,7 @@ const styles = {
     fontSize: 20,
     color: colors.primaryText,
     includeFontPadding: false,
-    fontFamily: fonts.Regular,
+    fontFamily: fonts.DigitalBold,
   },
   startTimeContainer: {
     height: 90,
@@ -75,7 +75,7 @@ const styles = {
     fontSize: 15,
     color: colors.primaryText,
     includeFontPadding: false,
-    fontFamily: fonts.Light,
+    fontFamily: fonts.Digital,
   },
   lineBox: {
     height: 60,

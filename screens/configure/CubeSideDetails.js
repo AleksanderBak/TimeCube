@@ -1,16 +1,14 @@
+import { useEffect, useState, useCallback } from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { TextInput } from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import { Icon } from "@rneui/themed";
+
 import colors from "../../configs/colors";
 import availableCubeColors from "../../configs/availableCubeColors";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { Icon } from "@rneui/themed";
-import { useEffect, useState, useCallback } from "react";
-import { Button, TextInput } from "react-native-paper";
-import Task from "../../components/Task";
-import { useContext } from "react";
-import { CubeContext } from "../../components/CubeContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import fonts from "../../configs/fonts";
-import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 
 const Active = () => {
   return (

@@ -28,7 +28,14 @@
       [
         "expo-font",
         {
-          "fonts": ["./assets/fonts/Poppins-Regular.ttf"]
+          "fonts": [
+            "./assets/fonts/Poppins-Regular.ttf",
+            "./assets/fonts/Poppins-Bold.ttf",
+            "./assets/fonts/Poppins-SemiBold.ttf",
+            "./assets/fonts/Poppins-Light.ttf",
+            "./assets/fonts/Chakra-Regular.ttf",
+            "./assets/fonts/Chakra-SemiBold.ttf"
+          ]
         }
       ]
     ]

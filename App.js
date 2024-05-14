@@ -2,7 +2,7 @@ import { StyleSheet, View, StatusBar, Text } from "react-native";
 import Timeline from "./screens/Timeline";
 import Stats from "./screens/Stats";
 import { NavigationContainer } from "@react-navigation/native";
-import { useEffect, useState, useCallback } from "react";
+import { useState } from "react";
 import ConfigureScreen from "./screens/ConfigureScreen";
 import colors from "./configs/colors";
 import { Icon, PaperProvider, BottomNavigation } from "react-native-paper";
@@ -18,6 +18,8 @@ const App = () => {
     PoppinsLight: require("./assets/fonts/Poppins-Light.ttf"),
     PoppinsItalic: require("./assets/fonts/Poppins-Italic.ttf"),
     PoppinsSemiBold: require("./assets/fonts/Poppins-SemiBold.ttf"),
+    ChakraRegular: require("./assets/fonts/ChakraPetch-Regular.ttf"),
+    ChakraBold: require("./assets/fonts/ChakraPetch-SemiBold.ttf"),
   });
 
   if (!fontsLoaded) {

@@ -1,8 +1,9 @@
 import { createStackNavigator } from "@react-navigation/stack";
+
 import Configure from "./configure/Configure";
 import CubeSideDetails from "./configure/CubeSideDetails";
+
 import colors from "../configs/colors";
-import { View, Text } from "react-native";
 
 const Stack = createStackNavigator();
 

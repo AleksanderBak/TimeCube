@@ -1,6 +1,5 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import colors from "../configs/colors";
-import { update } from "firebase/database";
 import fonts from "../configs/fonts";
 
 const CubeSide = ({ number, color, name, navigation, colorName }) => {
