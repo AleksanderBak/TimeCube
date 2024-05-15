@@ -3,15 +3,40 @@ import cubeColors from "../configs/availableCubeColors";
 import colors from "../configs/colors";
 import fonts from "../configs/fonts";
 
-const Task = ({ name, time, startTime, color }) => {
-  bgColor = cubeColors[color].dim;
-  borderColor = cubeColors[color].bright;
+const Task = ({ name, stopTime, startTime, color }) => {
+  const bgColor = cubeColors[color].dim;
+  const borderColor = cubeColors[color].bright;
+
+  const start = new Date(startTime * 1000);
+  const stop = new Date(stopTime * 1000);
+
+  const startHours = start.getHours() + "";
+  const startMinutes = start.getMinutes() + "";
+  const startString = `${startHours}:${
+    startMinutes.length > 1 ? startMinutes : "0" + startMinutes
+  }`;
+
+  const stopHours = stop.getHours() + "";
+  const stopMinutes = stop.getMinutes() + "";
+  const stopString = `${stopHours}:${
+    stopMinutes.length > 1 ? stopMinutes : "0" + stopMinutes
+  }`;
+
+  const durationHours = Math.floor(((stop - start) % 86400000) / 3600000);
+  const durationMinutes = Math.floor(
+    (((stop - start) % 86400000) % 3600000) / 60000
+  ).toString();
+
+  const duration = `${durationHours}:${
+    durationMinutes.length > 1 ? durationMinutes : "0" + durationMinutes
+  }`;
 
   return (
     <View style={styles.mainContainer}>
-      <View style={styles.startTimeContainer}>
-        <Text style={styles.startTimeText}>{startTime}</Text>
+      <View style={styles.timeContainer}>
+        <Text style={styles.timeText}>{startString}</Text>
         <View style={[styles.lineBox, { backgroundColor: borderColor }]}></View>
+        <Text style={styles.timeText}>{stopString}</Text>
       </View>
       <View
         style={[
@@ -21,8 +46,8 @@ const Task = ({ name, time, startTime, color }) => {
       >
         <Text style={styles.nameText}>{name}</Text>
       </View>
-      <View style={styles.timeContainer}>
-        <Text style={styles.timeText}>{time}</Text>
+      <View style={styles.durationContainer}>
+        <Text style={styles.durationText}>{duration}</Text>
       </View>
     </View>
   );
@@ -30,15 +55,16 @@ const Task = ({ name, time, startTime, color }) => {
 
 const styles = {
   mainContainer: {
+    marginVertical: 5,
     flexDirection: "row",
-    marginBottom: 0,
+    justifyContent: "center",
+    alignItems: "center",
   },
   nameContainer: {
-    height: 60,
+    height: 70,
     width: 200,
-    borderLeftWidth: 5,
+    borderLeftWidth: 6,
     borderRadius: 7,
-    marginTop: 25,
   },
   nameText: {
     fontSize: 17,
@@ -47,7 +73,7 @@ const styles = {
     paddingVertical: 5,
     fontFamily: fonts.Light,
   },
-  timeContainer: {
+  durationContainer: {
     height: 60,
     width: 60,
     borderWidth: 1,
@@ -57,29 +83,30 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     marginLeft: 15,
-    marginTop: 25,
   },
-  timeText: {
-    fontSize: 20,
+  durationText: {
+    fontSize: 18,
     color: colors.primaryText,
     includeFontPadding: false,
     fontFamily: fonts.DigitalBold,
   },
-  startTimeContainer: {
+  timeContainer: {
     height: 90,
     width: 40,
     alignItems: "center",
     marginRight: 5,
+    justifyContent: "center",
   },
-  startTimeText: {
-    fontSize: 15,
+  timeText: {
+    fontSize: 12,
     color: colors.primaryText,
     includeFontPadding: false,
     fontFamily: fonts.Digital,
   },
   lineBox: {
-    height: 60,
+    height: 20,
     width: 2,
+    margin: 5,
   },
 };
 

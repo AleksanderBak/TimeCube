@@ -10,6 +10,7 @@ import Task from "../components/Task";
 
 import cubeConfig from "../configs/cubeConfig";
 import firebaseConfig from "../configs/firebaseConfig";
+import cache from "../configs/cacheConfig";
 
 const sameYear = (date1, date2) => {
   return (
@@ -45,6 +46,19 @@ const Timeline = () => {
   };
 
   const getTasks = useCallback(async () => {
+    const currentTime = Date.now();
+    const cachedData = await AsyncStorage.getItem(cache.TASK_KEY);
+    const parsedData = JSON.parse(cachedData || "{}");
+
+    if (
+      parsedData.data &&
+      parsedData.timestamp &&
+      currentTime - parsedData.timestamp < cache.TASK_CACHE_TIME
+    ) {
+      setTasks(parsedData.data);
+      return;
+    }
+
     let taskResult = [];
     const taskQuerySnapshot = await getDocs(collection(db, "Tasks"));
     taskQuerySnapshot.forEach((task) => {
@@ -55,13 +69,18 @@ const Timeline = () => {
         StopTime: task.data().StopTime.seconds,
       });
     });
+
+    await AsyncStorage.setItem(
+      cache.TASK_KEY,
+      JSON.stringify({ timestamp: currentTime, data: taskResult })
+    );
+
     setTasks(taskResult);
   }, []);
 
   const getCubes = async () => {
     try {
-      const keys = await AsyncStorage.getAllKeys();
-      const result = await AsyncStorage.multiGet(keys);
+      const result = await AsyncStorage.multiGet(cache.CUBE_KEYS);
       let resultObject = {};
       result.forEach((item) => {
         resultObject[item[0]] = JSON.parse(item[1]);
@@ -74,6 +93,7 @@ const Timeline = () => {
 
   const onRefresh = async () => {
     setIsRefreshing(true);
+    await AsyncStorage.removeItem(cache.TASK_KEY);
     getCubes();
     getTasks();
     setIsRefreshing(false);
@@ -88,52 +108,6 @@ const Timeline = () => {
     fetchData();
   }, [activeDay]);
 
-  const taskRenderer = ({ item }) => {
-    const id = item.CubeId;
-
-    const currDate = days[activeDay].date;
-
-    const startDate = new Date(item.StartTime * 1000);
-
-    // DIVISION BY DAYS
-    // if (!sameYear(currDate, startDate)) {
-    //   return <View></View>;
-    // }
-
-    let minutes = Math.round(
-      (item.StopTime - item.StartTime) / 60,
-      2
-    ).toString();
-    const hours = Math.floor(minutes / 60);
-
-    minutes = (minutes % 60).toString();
-
-    if (minutes.length < 2) {
-      minutes = `0${minutes}`;
-    }
-
-    const totalTime = `${hours}:${minutes}`;
-
-    const startHour = startDate.getHours();
-    let startMinutes = startDate.getMinutes();
-    if (startMinutes < 10) {
-      startMinutes = `0${startMinutes}`;
-    }
-    const startHourWithMinutes = `${startHour}:${startMinutes}`;
-
-    const name = cubes[id] ? cubes[id].name : cubeConfig[id].name;
-    const color = cubes[id] ? cubes[id].color : cubeConfig[id].color;
-
-    return (
-      <Task
-        name={name}
-        time={totalTime}
-        startTime={startHourWithMinutes}
-        color={color}
-      />
-    );
-  };
-
   return cubes && tasks && days ? (
     <View style={styles.TaskBox}>
       <Calendar days={days} activeDay={activeDay} setActiveDay={setActiveDay} />
@@ -144,7 +118,17 @@ const Timeline = () => {
           onRefresh();
         }}
         keyExtractor={(item) => item.id}
-        renderItem={taskRenderer}
+        renderItem={({ item }) => {
+          const id = item.CubeId;
+          return (
+            <Task
+              name={cubes[id] ? cubes[id].name : cubeConfig[id].name}
+              stopTime={item.StopTime}
+              startTime={item.StartTime}
+              color={cubes[id] ? cubes[id].color : cubeConfig[id].color}
+            />
+          );
+        }}
         showsVerticalScrollIndicator={false}
       ></FlatList>
     </View>
