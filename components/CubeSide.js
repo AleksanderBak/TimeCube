@@ -35,6 +35,7 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     margin: 5,
+    padding: 10,
     borderTopWidth: 5,
   },
   sideNumber: {

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { View, FlatList } from "react-native";
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs } from "firebase/firestore/lite";
@@ -11,8 +11,9 @@ import Task from "../components/Task";
 import cubeConfig from "../configs/cubeConfig";
 import firebaseConfig from "../configs/firebaseConfig";
 import cache from "../configs/cacheConfig";
+import { get } from "firebase/database";
 
-const sameYear = (date1, date2) => {
+const sameDay = (date1, date2) => {
   return (
     date1.getFullYear() === date2.getFullYear() &&
     date1.getMonth() === date2.getMonth() &&
@@ -20,12 +21,24 @@ const sameYear = (date1, date2) => {
   );
 };
 
+const getCurrentTimeUTCPlusOne = () => {
+  let now = new Date();
+
+  // Convert the current UTC time to UTC+2
+  let nowUTCPlus2 = new Date(now.getTime() + 1 * 60 * 60 * 1000);
+
+  // Get the timestamp in milliseconds since the Unix epoch
+  let timestampUTCPlus2 = nowUTCPlus2.getTime();
+  return timestampUTCPlus2;
+};
+
 const Timeline = () => {
-  const [cubes, setCubes] = useState({});
-  const [tasks, setTasks] = useState({});
+  const [cubes, setCubes] = useState(null);
+  const [tasks, setTasks] = useState(null);
+  const [activeTasks, setActiveTasks] = useState([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [days, setDays] = useState();
-  const [activeDay, setActiveDay] = useState(2);
+  const [activeDay, setActiveDay] = useState(5);
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
@@ -45,7 +58,7 @@ const Timeline = () => {
     setDays(days);
   };
 
-  const getTasks = useCallback(async () => {
+  const getTasks = async () => {
     const currentTime = Date.now();
     const cachedData = await AsyncStorage.getItem(cache.TASK_KEY);
     const parsedData = JSON.parse(cachedData || "{}");
@@ -61,12 +74,13 @@ const Timeline = () => {
 
     let taskResult = [];
     const taskQuerySnapshot = await getDocs(collection(db, "Tasks"));
+
     taskQuerySnapshot.forEach((task) => {
       taskResult.push({
         id: task.id,
         CubeId: task.data().CubeId,
-        StartTime: task.data().StartTime.seconds,
-        StopTime: task.data().StopTime.seconds,
+        StartTime: task.data().StartTime.seconds - 3600,
+        StopTime: task.data().EndTime ? task.data().EndTime.seconds - 3600 : -1,
       });
     });
 
@@ -76,7 +90,7 @@ const Timeline = () => {
     );
 
     setTasks(taskResult);
-  }, []);
+  };
 
   const getCubes = async () => {
     try {
@@ -99,20 +113,35 @@ const Timeline = () => {
     setIsRefreshing(false);
   };
 
+  const getActiveTasks = (tasks) => {
+    if (days && days[activeDay]) {
+      const activeTasks = tasks.filter((task) => {
+        const taskDate = new Date(task.StartTime * 1000);
+        return sameDay(taskDate, days[activeDay].date);
+      });
+      activeTasks.sort((a, b) => a.StartTime - b.StartTime);
+      setActiveTasks(activeTasks);
+    }
+  };
+
+  useEffect(() => {
+    getActiveTasks(tasks);
+  }, [activeDay, tasks]);
+
   useEffect(() => {
     const fetchData = async () => {
-      getCubes();
-      getTasks();
+      getDays();
+      await getCubes();
+      await getTasks();
     };
-    getDays();
     fetchData();
-  }, [activeDay]);
+  }, []);
 
   return cubes && tasks && days ? (
     <View style={styles.TaskBox}>
       <Calendar days={days} activeDay={activeDay} setActiveDay={setActiveDay} />
       <FlatList
-        data={tasks}
+        data={activeTasks}
         refreshing={isRefreshing}
         onRefresh={() => {
           onRefresh();
@@ -122,10 +151,12 @@ const Timeline = () => {
           const id = item.CubeId;
           return (
             <Task
+              id={item.id}
               name={cubes[id] ? cubes[id].name : cubeConfig[id].name}
               stopTime={item.StopTime}
               startTime={item.StartTime}
               color={cubes[id] ? cubes[id].color : cubeConfig[id].color}
+              refresh={onRefresh}
             />
           );
         }}

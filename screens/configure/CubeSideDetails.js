@@ -19,14 +19,14 @@ const Active = () => {
 };
 
 const CubeSideDetails = ({ route, navigation }) => {
-  const updateCube = useCallback(async (id, name, color) => {
+  const updateCube = async (id, name, color) => {
     const values = { name: name, color: color };
     try {
       await AsyncStorage.setItem(id.toString(), JSON.stringify(values));
     } catch (e) {
       console.log("Error saving data");
     }
-  }, []);
+  };
 
   const { number, name, colorName } = route.params;
   const [activeColor, setActiveColor] = useState(colorName);
@@ -75,7 +75,11 @@ const CubeSideDetails = ({ route, navigation }) => {
       <TextInput
         label={<Text style={styles.textInputLabel}>TaskName:</Text>}
         value={activeName}
-        onChangeText={(text) => setActiveName(text)}
+        onChangeText={(text) => {
+          if (text.length < 25) {
+            setActiveName(text);
+          }
+        }}
         style={{
           width: 250,
           margin: 10,
@@ -227,9 +231,11 @@ const styles = StyleSheet.create({
 
   taskNameBox: {
     margin: 30,
+    paddingRight: 20,
+    paddingBottom: 10,
     borderLeftWidth: 6,
     borderRadius: 5,
-    height: 70,
+    height: 80,
     width: 200,
   },
 

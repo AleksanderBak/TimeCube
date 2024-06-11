@@ -1,16 +1,27 @@
 import { View, Text, StyleSheet } from "react-native";
-import colors from "../configs/colors";
-import availableCubeColors from "../configs/availableCubeColors";
 
-const TaskStats = ({ taskName, taskTotalTime, taskAvgTime }) => {
+import colors from "../configs/colors";
+import fonts from "../configs/fonts";
+
+const TaskStats = ({ taskColor, taskName, taskTotalTime, taskAvgTime }) => {
   return (
     <View style={styles.taskStatBox}>
-      <View style={styles.taskLabel}>
-        <Text style={styles.taskLabelText}>{taskName}</Text>
+      <View style={[styles.taskLabel, { borderColor: taskColor.dim }]}>
+        <Text style={[styles.taskLabelText, { color: taskColor.bright }]}>
+          {taskName}
+        </Text>
       </View>
-      <Text style={styles.totalTimeText}>Total time: {taskTotalTime} min</Text>
+      <Text style={styles.totalTimeText}>
+        Total time:{" "}
+        <Text style={{ color: taskColor.bright, fontFamily: fonts.Digital }}>
+          {taskTotalTime}
+        </Text>
+      </Text>
       <Text style={styles.avgTimeText}>
-        Average time per day: {taskAvgTime} min
+        Average time:{" "}
+        <Text style={{ color: taskColor.bright, fontFamily: fonts.Digital }}>
+          {taskAvgTime}
+        </Text>
       </Text>
     </View>
   );
@@ -23,22 +34,22 @@ const styles = StyleSheet.create({
   taskLabel: {
     marginBottom: 10,
     borderBottomWidth: 2,
-    borderBottomColor: availableCubeColors.forestGreen.bright,
   },
   taskLabelText: {
-    color: availableCubeColors.forestGreen.bright,
     fontSize: 20,
-    fontWeight: "bold",
+    fontFamily: fonts.SemiBold,
   },
   totalTimeText: {
     color: colors.primaryText,
     fontSize: 15,
     marginBottom: 5,
+    fontFamily: fonts.Regular,
   },
   avgTimeText: {
     color: colors.primaryText,
     fontSize: 15,
     marginBottom: 20,
+    fontFamily: fonts.Regular,
   },
 });
 

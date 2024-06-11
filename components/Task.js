@@ -1,9 +1,55 @@
-import { View, Text } from "react-native";
+import { View, Text, Animated, TouchableOpacity } from "react-native";
+import { useEffect, useRef } from "react";
+import { initializeApp } from "firebase/app";
 import cubeColors from "../configs/availableCubeColors";
 import colors from "../configs/colors";
 import fonts from "../configs/fonts";
+import firebaseConfig from "../configs/firebaseConfig";
+import { doc, deleteDoc, getFirestore } from "firebase/firestore/lite";
 
-const Task = ({ name, stopTime, startTime, color }) => {
+const Task = ({ id, name, stopTime, startTime, color, refresh }) => {
+  const opacityValue = useRef(new Animated.Value(1)).current;
+  let allowDelete = false;
+
+  if (stopTime === -1) {
+    stopTime = new Date().getTime() / 1000;
+    allowDelete = true;
+  }
+
+  const deleteTask = async () => {
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    try {
+      await deleteDoc(doc(db, "Tasks", id));
+      console.log("Task deleted");
+    } catch (e) {
+      console.log("Error deleting task");
+      console.log(e);
+    }
+    refresh();
+  };
+
+  useEffect(() => {
+    const pulsate = () => {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(opacityValue, {
+            toValue: 0.1,
+            duration: 1500,
+            useNativeDriver: true,
+          }),
+          Animated.timing(opacityValue, {
+            toValue: 1,
+            duration: 1500,
+            useNativeDriver: true,
+          }),
+        ])
+      ).start();
+    };
+
+    pulsate();
+  }, [opacityValue]);
+
   const bgColor = cubeColors[color].dim;
   const borderColor = cubeColors[color].bright;
 
@@ -23,9 +69,13 @@ const Task = ({ name, stopTime, startTime, color }) => {
   }`;
 
   const durationHours = Math.floor(((stop - start) % 86400000) / 3600000);
-  const durationMinutes = Math.floor(
+  let durationMinutes = Math.floor(
     (((stop - start) % 86400000) % 3600000) / 60000
   ).toString();
+
+  if (durationHours === 0 && durationMinutes === "0") {
+    durationMinutes = "1";
+  }
 
   const duration = `${durationHours}:${
     durationMinutes.length > 1 ? durationMinutes : "0" + durationMinutes
@@ -36,7 +86,7 @@ const Task = ({ name, stopTime, startTime, color }) => {
       <View style={styles.timeContainer}>
         <Text style={styles.timeText}>{startString}</Text>
         <View style={[styles.lineBox, { backgroundColor: borderColor }]}></View>
-        <Text style={styles.timeText}>{stopString}</Text>
+        <Text style={styles.timeText}>{allowDelete ? "" : stopString}</Text>
       </View>
       <View
         style={[
@@ -45,9 +95,27 @@ const Task = ({ name, stopTime, startTime, color }) => {
         ]}
       >
         <Text style={styles.nameText}>{name}</Text>
+        {allowDelete && (
+          <TouchableOpacity
+            style={[styles.cancelTask, { borderColor: borderColor }]}
+            onPress={() => {
+              deleteTask();
+            }}
+          >
+            <Text style={styles.timeText}>Cancel</Text>
+          </TouchableOpacity>
+        )}
       </View>
       <View style={styles.durationContainer}>
-        <Text style={styles.durationText}>{duration}</Text>
+        {allowDelete ? (
+          <Animated.Text
+            style={[styles.durationText, { opacity: opacityValue }]}
+          >
+            {duration}
+          </Animated.Text>
+        ) : (
+          <Text style={styles.durationText}>{duration}</Text>
+        )}
       </View>
     </View>
   );
@@ -107,6 +175,15 @@ const styles = {
     height: 20,
     width: 2,
     margin: 5,
+  },
+  cancelTask: {
+    position: "absolute",
+    bottom: 5,
+    right: 5,
+    backgroundColor: colors.cancelButton,
+    borderRadius: 5,
+    padding: 5,
+    borderWidth: 2,
   },
 };
 

@@ -5,8 +5,6 @@ import { set } from "firebase/database";
 import fonts from "../configs/fonts";
 import { useFonts } from "expo-font";
 
-console.log(fonts);
-
 const CalendarCard = ({ dayNumber, month, active, id, setActiveDay }) => {
   let bgColor = active ? colors.calendarActive : colors.calendarInactive;
 
