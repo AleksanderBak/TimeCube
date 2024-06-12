@@ -21,6 +21,7 @@ import cache from "../configs/cacheConfig";
 import firebaseConfig from "../configs/firebaseConfig";
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs } from "firebase/firestore/lite";
+import { get } from "firebase/database";
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -34,9 +35,11 @@ const Stats = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [tasks, setTasks] = useState();
 
-  const onRefresh = () => {
+  const onRefresh = async () => {
     setRefreshing(true);
+    await AsyncStorage.removeItem(cache.TASK_STATS_KEY);
     getCubes();
+    showStats();
     setRefreshing(false);
   };
 
