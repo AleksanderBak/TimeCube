@@ -148,7 +148,15 @@ const Stats = () => {
       const result = await AsyncStorage.multiGet(cache.CUBE_KEYS);
       let resultObject = {};
       result.forEach((item) => {
-        resultObject[item[0]] = JSON.parse(item[1]);
+        if (item[1] === null) {
+          cubeData = {
+            name: `Task ${item[0]}`,
+            color: "red",
+          };
+        } else {
+          cubeData = JSON.parse(item[1]);
+        }
+        resultObject[item[0]] = cubeData;
       });
       setCubes(resultObject);
     } catch (e) {
@@ -164,11 +172,10 @@ const Stats = () => {
     if (cubes) {
       let chartData = [];
       let data = [];
-      console.log(tasks);
       for (let cube in cubes) {
         chartData.push({
           id: cube,
-          text: cubes[cube].name,
+          text: cube,
           value: tasks?.[cube] ? tasks[cube].totalTime : 0,
           color: availableCubeColors[cubes[cube].color].bright,
           textColor: availableCubeColors[cubes[cube].color].dim,

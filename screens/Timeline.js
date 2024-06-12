@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { View, FlatList } from "react-native";
+import { View, FlatList, Text } from "react-native";
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs } from "firebase/firestore/lite";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -7,11 +7,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import LoadingScreen from "../components/LoadingScreen";
 import Calendar from "../components/Calendar";
 import Task from "../components/Task";
+import RefreshButton from "../components/RefreshButton";
 
 import cubeConfig from "../configs/cubeConfig";
 import firebaseConfig from "../configs/firebaseConfig";
 import cache from "../configs/cacheConfig";
-import { get } from "firebase/database";
+import fonts from "../configs/fonts";
+import colors from "../configs/colors";
 
 const sameDay = (date1, date2) => {
   return (
@@ -140,6 +142,15 @@ const Timeline = () => {
   return cubes && tasks && days ? (
     <View style={styles.TaskBox}>
       <Calendar days={days} activeDay={activeDay} setActiveDay={setActiveDay} />
+      {activeTasks.length === 0 ? (
+        activeDay === 5 ? (
+          <RefreshButton refreshFunction={onRefresh} />
+        ) : (
+          <View style={styles.noTaskBox}>
+            <Text style={styles.noTaskText}>No tasks for this day</Text>
+          </View>
+        )
+      ) : null}
       <FlatList
         data={activeTasks}
         refreshing={isRefreshing}
@@ -172,6 +183,15 @@ styles = {
   TaskBox: {
     flex: 1,
     alignItems: "center",
+  },
+  noTaskBox: {
+    paddingTop: 50,
+    justifyContent: "center",
+  },
+  noTaskText: {
+    fontFamily: fonts.Regular,
+    fontSize: 20,
+    color: colors.secondaryText,
   },
 };
 

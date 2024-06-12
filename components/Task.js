@@ -21,7 +21,6 @@ const Task = ({ id, name, stopTime, startTime, color, refresh }) => {
     const db = getFirestore(app);
     try {
       await deleteDoc(doc(db, "Tasks", id));
-      console.log("Task deleted");
     } catch (e) {
       console.log("Error deleting task");
       console.log(e);
